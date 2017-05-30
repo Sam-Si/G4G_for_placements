@@ -286,3 +286,94 @@ int main(){
 	return 0;
 }
 
+
+// Version 3 N3 solution
+
+#include <bits/stdc++.h>
+using namespace std;
+
+void solution(){
+    int n;
+    int k;
+    
+    cin >> n;
+    cin >> k;
+    
+    vector <int> input(n);
+    
+    for(int i = 0;i < n;i++){
+        cin >> input[i];
+    }
+    
+    sort(input.begin(),input.end());
+    
+    vector < vector <int> > final_sol;
+    
+    for(int i = 0;i < n-3;i++){
+        for(int j = i+1;j < n-2;j++){
+            int find = k - input[i] - input[j];
+            
+            int low = j+1;
+            int high = n-1;
+            
+            while(low < high){
+                
+                int temp_sum = input[low] + input[high];
+                
+                vector <int> temp;
+                
+                bool access = true;
+                
+                if(temp_sum == find){
+                    
+                    temp.push_back(input[i]);
+                    temp.push_back(input[j]);
+                    temp.push_back(input[low]);
+                    temp.push_back(input[high]);
+                    
+                    for(int iti = 0;iti < final_sol.size();iti++){
+                        if(temp == final_sol[iti]){
+                            access = false;
+                        }
+                    }
+                    
+                    if(access){
+                        final_sol.push_back(temp);
+                    }
+                    
+                    low++;
+                }
+                
+                else if(temp_sum < find){
+                    low++;
+                }
+                else{
+                    high--;
+                }
+                
+            }
+        }
+    }
+    
+    if(final_sol.empty()){
+        cout << "-1";
+    }
+    
+    for(int i = 0;i < final_sol.size();i++){
+        for(int j = 0;j < 4;j++){
+            cout << final_sol[i][j] << " ";
+        }
+        cout << "$";
+    }
+    cout << endl;
+}
+
+int main(){
+	int t;
+        cin >> t;
+        
+        while(t--){
+            solution();
+        }
+	return 0;
+}
