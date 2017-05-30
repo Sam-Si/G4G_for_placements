@@ -148,3 +148,141 @@ int main(){
         }
 	return 0;
 }
+
+// Version 2
+// A bit better than before
+
+#include <bits/stdc++.h>
+using namespace std;
+
+struct helper_struct{
+
+    int sum;
+    int fir;
+    int sec;
+
+};
+
+bool compara(const helper_struct &a,const helper_struct &b){
+
+    if(a.sum < b.sum){
+        return true;
+    }
+    return false;
+
+}
+
+bool nocollision(int a,int b,int c,int d){
+
+    if(a == c || a == d || b == c || b == d){
+        return false;
+    }
+    //cerr << "Match: ";
+    //cerr << a << " " << b << " " << c << " " << d << endl;
+    return true;
+
+}
+
+void solution(){
+
+    vector <vector <int> > final_sol;
+
+    int n;
+    int k;
+
+    cin >> n;
+    cin >> k;
+
+    vector <int> input(n);
+
+    for(int i = 0;i < n;i++){
+        cin >> input[i];
+
+    }
+    
+    sort(input.begin(),input.end());
+
+    vector <helper_struct> sinput;
+
+    for(int i = 0;i < n-1;i++){
+        for(int j = i+1;j < n;j++){
+            helper_struct temp;
+
+            temp.sum = input[i] + input[j];
+            temp.fir = i;
+            temp.sec = j;
+
+            sinput.push_back(temp);
+        }
+    }
+
+    sort(sinput.begin(),sinput.end(),compara);
+
+    int n2 = sinput.size();
+
+    int low = 0;
+    int high = n2 - 1;
+
+    while(low < n2 && high >= 0){
+
+        vector <int> temp;
+
+        int temp_sum = sinput[low].sum + sinput[high].sum;
+
+        bool accessF = true;
+
+        if(temp_sum == k){
+            if(nocollision(sinput[low].fir,sinput[low].sec,sinput[high].fir,sinput[high].sec)){
+                temp.push_back(input[sinput[low].fir]);
+                temp.push_back(input[sinput[low].sec]);
+                temp.push_back(input[sinput[high].fir]);
+                temp.push_back(input[sinput[high].sec]);
+
+                sort(temp.begin(),temp.end());
+
+                for(int i = 0;i < final_sol.size();i++){
+                    if(temp == final_sol[i]){
+                        accessF = false;
+                        break;
+                    }
+                }
+                if(accessF){
+                    final_sol.push_back(temp);
+                }
+            }
+
+            low++;
+            high--;
+
+        }
+        else if(temp_sum < k){
+            low++;
+        }
+        else if(temp_sum > k){
+            high--;
+        }
+    }
+
+    if(final_sol.empty()){
+        cout << "-1";
+    }
+
+    for(int i = 0;i < final_sol.size();i++){
+        for(int j = 0; j < 4;j++){
+            cout << final_sol[i][j] << " ";
+        }
+        cout << "$";
+    }
+    cout << endl;
+}
+
+int main(){
+	int t;
+        cin >> t;
+
+        while(t--){
+            solution();
+        }
+	return 0;
+}
+
